@@ -9,4 +9,5 @@ public interface UserDao {
 
    void add(User user, Car car);
    List<User> listUsers();
+   User findByCar(Car car);
 }

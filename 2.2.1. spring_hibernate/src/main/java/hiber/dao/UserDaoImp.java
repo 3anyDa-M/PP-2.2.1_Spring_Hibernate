@@ -19,7 +19,7 @@ public class UserDaoImp implements UserDao {
     public void add(User user, Car car) {
         user.setUserCar(car);
         sessionFactory.getCurrentSession().save(user);
-//      sessionFactory.getCurrentSession().save(car);
+
     }
 
     @Override
@@ -28,6 +28,15 @@ public class UserDaoImp implements UserDao {
         String hql = "SELECT u FROM User u LEFT JOIN FETCH u.userCar";
         TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery(hql, User.class);
         return query.getResultList();
+    }
+    @Override
+    public User findByCar(Car car) {
+        String hql = "FROM User u WHERE u.userCar.model = :model AND u.userCar.series = :series";
+        TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery(hql, User.class);
+        query.setParameter("model", car.getModel());
+        query.setParameter("series", car.getSeries());
+        query.setMaxResults(1);
+        return query.getSingleResult();
     }
 
 }
